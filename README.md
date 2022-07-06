@@ -42,7 +42,7 @@ This will create the image with the default build arguments and mark it as `bwhc
 e.g.:
 
 ```
-docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg NUXT_PORT=1234 .
+docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg BWHC_BASE_DIR=/opt/application .
 ```
 
 ## Using Docker Compose
