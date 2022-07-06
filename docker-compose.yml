@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+
+    frontend:
+        build:
+            context: .
+            dockerfile: Frontend.Dockerfile
+            args:
+                NUXT_HOST: 0.0.0.0
+                NUXT_PORT: 3000
+                BACKEND_PROTOCOL: http
+                BACKEND_HOSTNAME: localhost
+                BACKEND_PORT: 9000
+        environment:
+            BACKEND_PROTOCOL: http
+            BACKEND_HOSTNAME: localhost
+            BACKEND_PORT: 9000
+
+    backend:
+        build:
+            context: .
+            dockerfile: Backend.Dockerfile
+            args:
+                BWHC_BASE_DIR: /bwhc-backend
+        environment:
+            APPLICATION_SECRET: mydummyapplicationsecret12345678
+            ZPM_SITE: http://zpm.example.com
+            # PLAY_HTTP_PORT: 9000
+            # PLAY_HTTP_ADDRESS: 0.0.0.0
