@@ -6,9 +6,14 @@ The purpose of this project is to provide docker images for [bwHealthCloud](http
 
 Make sure that latest release files are in the project directory, as docker build will pick them up without downloading them.
 
-## Frontend
+## Build images
 
-To build the image for bwHealtCloud frontend, use the following command
+This project contains two files for use with frontend and backend `Frontend.Dockerfile` and `Backend.Dockerfile`.
+Both of them use build arguments to customize build on build time.
+
+### Frontend
+
+To build the image for bwHealthCloud frontend, use the following command
 
 ```
 docker build -t bwhc-frontend -f Frontend.Dockerfile .
@@ -26,15 +31,15 @@ e.g.:
 docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg NUXT_PORT=1234 .
 ```
 
-## Backend
+### Backend
 
-To build the image for bwHealtCloud backend, use the following command
+To build the image for bwHealthCloud backend, use the following command
 
 ```
 docker build -t bwhc-backend -f Backend.Dockerfile .
 ```
 
-This will create the image with the default build arguments and mark it as `bwhc-backend`. To customize the build, specify custom values as shown above.
+This will create the image with the default build arguments and mark it as `bwhc-backend`. To customize the build, specify custom values.
 
 * `VERSION`: The version to be used. Current value `2205`
 * `BWHC_BASE_DIR`: The directory to hold the application and config files
@@ -45,6 +50,20 @@ e.g.:
 docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg BWHC_BASE_DIR=/opt/application .
 ```
 
+## Run the images
+
+Both images can be started like any other docker image. Make sure you provide required docker volumes to keep data after service recreation.
+
+The backend image uses two volumes relative to `$BWHC_BASE_DIR` provided at build time: `$BWHC_BASE_DIR/data` and `$BWHC_BASE_DIR/hgnc_data`.
+
 ## Using Docker Compose
 
 This project provides support for Docker Compose. So it is possible to build and run frontend and backend using Docker compose.
+
+## Limitations and final notes
+
+The image for bwHealthCloud Frontend starts as expected, using configured build arguments and environment variables at build time.
+Since frontends access to the backend is configured at build time, it is not required to provide environment variables at runtime.
+
+The bwHealthCloud Backend image starts using start command provided in release package.
+I have not tested if there are any issues running the backend in addition to login.
