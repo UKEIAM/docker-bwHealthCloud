@@ -42,12 +42,12 @@ docker build -t bwhc-backend -f Backend.Dockerfile .
 This will create the image with the default build arguments and mark it as `bwhc-backend`. To customize the build, specify custom values.
 
 * `VERSION`: The version to be used. Current value `2205`
-* `BWHC_BASE_DIR`: The directory to hold the application and config files
+* `BWHC_BASE_DIR`: The directory to hold the application and config files. Defaults to `/bwhc-backend`.
 
 e.g.:
 
 ```
-docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg BWHC_BASE_DIR=/opt/application .
+docker build -t bwhc-backend -f Backend.Dockerfile --build-arg BWHC_BASE_DIR=/opt/bwhc-backend .
 ```
 
 ## Run the images
@@ -55,6 +55,10 @@ docker build -t bwhc-frontend -f Frontend.Dockerfile --build-arg BWHC_BASE_DIR=/
 Both images can be started like any other docker image. Make sure you provide required docker volumes to keep data after service recreation.
 
 The backend image uses two volumes relative to `$BWHC_BASE_DIR` provided at build time: `$BWHC_BASE_DIR/data` and `$BWHC_BASE_DIR/hgnc_data`.
+
+To use custom logging configuration in `logback.xml` and/or custom `bwhcConnectorConfig.xml` for backend,
+mount these files as readonly volumes or docker configuration to `$BWHC_BASE_DIR/logback.xml`
+and `$BWHC_BASE_DIR/bwhcConnectorConfig.xml`.
 
 ## Using Docker Compose
 
