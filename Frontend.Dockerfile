@@ -1,6 +1,7 @@
 FROM node:10-alpine
 
 # Change to latest release
+# Required for image build using local copy of zip file
 ARG VERSION=2207
 
 # nuxt host and port to be replaced in package.json. (See 2.3 in bwHCPrototypeManual)
@@ -14,8 +15,12 @@ ARG BACKEND_PROTOCOL=http
 ARG BACKEND_HOSTNAME=localhost
 ARG BACKEND_PORT=8080
 
-COPY bwhc-frontend_$VERSION.zip /
-RUN unzip bwhc-frontend_$VERSION.zip && rm bwhc-frontend_$VERSION.zip
+# Use local copy
+#COPY bwhc-frontend_$VERSION.zip /bwhc-frontend.zip
+# Use latest frontend
+RUN wget https://bwhealthcloud.de/downloads/latest/bwhc-frontend.zip
+
+RUN unzip bwhc-frontend.zip && rm bwhc-frontend.zip
 
 WORKDIR /bwhc-frontend
 
