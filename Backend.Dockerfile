@@ -1,7 +1,7 @@
 FROM openjdk:11-jre
 
 # Change to latest release
-ARG VERSION=2205
+ARG VERSION=2207
 
 ARG BWHC_BASE_DIR=/bwhc-backend
 

@@ -1,7 +1,7 @@
 FROM node:10-alpine
 
 # Change to latest release
-ARG VERSION=2205
+ARG VERSION=2207
 
 # nuxt host and port to be replaced in package.json. (See 2.3 in bwHCPrototypeManual)
 # NUXT_HOST should have a value with public available IP address from within container.
