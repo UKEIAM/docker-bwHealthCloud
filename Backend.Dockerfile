@@ -1,3 +1,4 @@
+# Build image
 FROM openjdk:11-jre AS builder
 
 # Change to latest release
@@ -6,9 +7,6 @@ ARG VERSION=2207
 ARG BWHC_BASE_DIR=/bwhc-backend
 
 ENV BWHC_BASE_DIR=$BWHC_BASE_DIR
-ENV BWHC_USER_DB_DIR=$BWHC_BASE_DIR/data/user-db
-ENV BWHC_DATA_ENTRY_DIR=$BWHC_BASE_DIR/data/data-entry
-ENV BWHC_QUERY_DATA_DIR=$BWHC_BASE_DIR/data/query-data
 
 COPY bwhc-backend_$VERSION.zip /
 RUN unzip bwhc-backend_$VERSION.zip && rm bwhc-backend_$VERSION.zip
@@ -26,8 +24,11 @@ RUN sed -i -r "s~BWHC_USER_DB_DIR.*~BWHC_USER_DB_DIR=$BWHC_USER_DB_DIR~" ./confi
 
 RUN ./install.sh $BWHC_BASE_DIR
 
+# Cleanup
 RUN mv bwhc-rest-api-gateway-*/  bwhc-rest-api-gateway/
+RUN rm *.zip bwhc-backend-service
 
+# Final image
 FROM openjdk:11-jre
 
 ARG BWHC_BASE_DIR=/bwhc-backend
@@ -38,11 +39,7 @@ ENV BWHC_DATA_ENTRY_DIR=$BWHC_BASE_DIR/data/data-entry
 ENV BWHC_QUERY_DATA_DIR=$BWHC_BASE_DIR/data/query-data
 ENV BWHC_CONNECTOR_CONFIG=$BWHC_BASE_DIR/bwhcConnectorConfig.xml
 
-COPY --from=builder $BWHC_BASE_DIR/config $BWHC_BASE_DIR/
-COPY --from=builder $BWHC_BASE_DIR/bwhcConnectorConfig.xml $BWHC_BASE_DIR/
-COPY --from=builder $BWHC_BASE_DIR/logback.xml $BWHC_BASE_DIR/
-COPY --from=builder $BWHC_BASE_DIR/production.conf $BWHC_BASE_DIR/
-COPY --from=builder $BWHC_BASE_DIR/bwhc-rest-api-gateway/ $BWHC_BASE_DIR/bwhc-rest-api-gateway/
+COPY --from=builder $BWHC_BASE_DIR/ $BWHC_BASE_DIR/
 
 VOLUME $BWHC_BASE_DIR/data
 VOLUME $BWHC_BASE_DIR/hgnc_data
