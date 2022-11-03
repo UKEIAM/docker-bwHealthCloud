@@ -44,7 +44,8 @@ docker build -t bwhc-backend -f Backend.Dockerfile .
 This will create the image with the default build arguments and mark it as `bwhc-backend`. To customize the build, specify custom values.
 
 * `VERSION`: The version to be used. Current value `2207`
-* `BWHC_BASE_DIR`: The directory to hold the application and config files. Defaults to `/bwhc-backend`.
+* `BWHC_BASE_DIR`: The directory to hold the application and config files.
+  This value defaults to `/bwhc-backend`. Changing this value requires changing paths in example `docker-compose.yml`.
 
 e.g.:
 
@@ -67,7 +68,7 @@ mount these files as readonly volumes or docker configuration to `$BWHC_BASE_DIR
 and `$BWHC_BASE_DIR/bwhcConnectorConfig.xml`.
 
 ```
-docker run -v $PWD/bwhcConnectorConfig.xml:/bwhc-backend/bwhcConnectorConfig.xml:ro"
+docker run -v $PWD/bwhcConnectorConfig.xml:/bwhc-backend/bwhcConnectorConfig.xml:ro
 ```
 
 Or using docker-compose liko so:
