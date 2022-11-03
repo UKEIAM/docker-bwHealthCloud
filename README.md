@@ -58,18 +58,63 @@ Both images can be started like any other docker image. Make sure you provide re
 
 The backend image uses two volumes relative to `$BWHC_BASE_DIR` provided at build time: `$BWHC_BASE_DIR/data` and `$BWHC_BASE_DIR/hgnc_data`.
 
+This project provides support for Docker Compose. So it is possible to build and run frontend and backend using Docker compose.
+
+### Using configuration files as volume
+
 To use custom logging configuration in `logback.xml` and/or custom `bwhcConnectorConfig.xml` for backend,
 mount these files as readonly volumes or docker configuration to `$BWHC_BASE_DIR/logback.xml`
 and `$BWHC_BASE_DIR/bwhcConnectorConfig.xml`.
 
-## Using Docker Compose
+```
+docker run -v $PWD/bwhcConnectorConfig.xml:/bwhc-backend/bwhcConnectorConfig.xml:ro"
+```
 
-This project provides support for Docker Compose. So it is possible to build and run frontend and backend using Docker compose.
+Or using docker-compose liko so:
+
+```
+...
+
+services:
+    backend:
+    #    ... other settings ...
+    volumes:
+        - "./bwhcConnectorConfig.xml:/bwhc-backend/bwhcConnectorConfig.xml:ro"
+
+...
+```
+
+### Using Docker configuration
+
+To use configuration files as docker config create a new docker config from configuration file.
+
+```
+docker config create bwhcConnectorConfig bwhcConnectorConfig.xml
+```
+
+Using docker-compose, change docker-compose file to contain entries like so.
+
+```
+configs:
+    bwhcConnectorConfig:
+        external: true
+
+...
+
+services:
+    backend:
+    #    ... other settings ...
+    configs:
+        - source: bwhcConnectorConfig
+          target: /bwhc-backend/bwhcConnectorConfig.xml
+
+...
+```
 
 ## Limitations and final notes
 
 The image for bwHealthCloud Frontend starts as expected, using configured build arguments and environment variables at build time.
 Since frontends access to the backend is configured at build time, it is not required to provide environment variables at runtime.
 
-The bwHealthCloud Backend image starts using start command provided in release package.
+The bwHealthCloud Backend image starts using play start script provided by application.
 I have not tested if there are any issues running the backend in addition to login.

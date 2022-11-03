@@ -1,5 +1,10 @@
 version: '3.7'
 
+# Example for use of docker configs
+# configs:
+#     bwhcConnectorConfig:
+#         external: true
+
 services:
 
     frontend:
@@ -26,5 +31,14 @@ services:
         environment:
             APPLICATION_SECRET: mydummyapplicationsecret12345678
             ZPM_SITE: http://zpm.example.com
-            # PLAY_HTTP_PORT: 9000
-            # PLAY_HTTP_ADDRESS: 0.0.0.0
+        #   PLAY_HTTP_PORT: 9000
+        #   PLAY_HTTP_ADDRESS: 0.0.0.0
+        #
+        # Example: use 'bwhcConnectorConfig.xml' from docker config
+        # configs:
+        #     - source: bwhcConnectorConfig
+        #       target: /bwhc-backend/bwhcConnectorConfig.xml
+        #
+        # Example: mount 'bwhcConnectorConfig.xml' into container
+        # volumes:
+        #     - "./bwhcConnectorConfig.xml:/bwhc-backend/bwhcConnectorConfig.xml:ro
