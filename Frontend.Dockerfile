@@ -40,6 +40,8 @@ RUN npm run generate
 # Final image
 FROM node:10-alpine
 
+USER 999
+
 COPY --from=builder /bwhc-frontend /bwhc-frontend
 
 WORKDIR /bwhc-frontend
