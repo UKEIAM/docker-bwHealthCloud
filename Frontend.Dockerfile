@@ -1,4 +1,5 @@
-FROM node:10-alpine
+# Build image
+FROM node:10-alpine AS builder
 
 # Change to latest release
 # Required for image build using local copy of zip file
@@ -35,6 +36,13 @@ RUN sed -i -r "s/^(\s*)baseUrl[^,]*(,?)/\1baseUrl: process.env.BASE_URL || '$BAC
 RUN sed -i -r "s/^(\s*)port[^,]*(,?)/\1port: process.env.port || ':$BACKEND_PORT'\2/" ./nuxt.config.js
 
 RUN npm run generate
+
+# Final image
+FROM node:10-alpine
+
+COPY --from=builder /bwhc-frontend /bwhc-frontend
+
+WORKDIR /bwhc-frontend
 
 EXPOSE $NUXT_PORT
 
