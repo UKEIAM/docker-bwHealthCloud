@@ -23,7 +23,7 @@ docker build -t bwhc-frontend -f Frontend.Dockerfile .
 
 This will create the image using default build arguments and mark it as `bwhc-frontend`. To customize the build, spezify custom values.
 
-* `VERSION`: The version to be used. Current value `2207`. Required for use with local release zip file.
+* `VERSION`: The version to be used. Current value `2209`. Required for use with local release zip file.
 * `NUXT_HOST` and `NUXT_PORT`: Server configuration, see 2.3 of bwHC manual for more information.
 * `BACKEND_PROTOCOL`, `BACKEND_HOSTNAME` and `BACKEND_PORT`: Backend access, see 2.4 of bwHC manual for more information.
 
@@ -43,7 +43,7 @@ docker build -t bwhc-backend -f Backend.Dockerfile .
 
 This will create the image with the default build arguments and mark it as `bwhc-backend`. To customize the build, specify custom values.
 
-* `VERSION`: The version to be used. Current value `2207`
+* `VERSION`: The version to be used. Current value `2209`
 * `BWHC_BASE_DIR`: The directory to hold the application and config files.
   This value defaults to `/bwhc-backend`. Changing this value requires changing paths in example `docker-compose.yml`.
 
