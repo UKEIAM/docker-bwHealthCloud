@@ -14,7 +14,7 @@ ARG NUXT_PORT=3000
 # Backend access setup. (See 2.4 in bwHCPrototypeManual)
 ARG BACKEND_PROTOCOL=http
 ARG BACKEND_HOSTNAME=localhost
-ARG BACKEND_PORT=8080
+ARG BACKEND_PORT
 
 # Use local copy
 COPY bwhc-frontend.zip /bwhc-frontend.zip
