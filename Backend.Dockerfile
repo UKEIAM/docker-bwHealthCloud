@@ -1,15 +1,12 @@
 # Build image
 FROM openjdk:11-jre AS builder
 
-# Change to latest release
-ARG VERSION=2209
-
 ARG BWHC_BASE_DIR=/bwhc-backend
 
 ENV BWHC_BASE_DIR=$BWHC_BASE_DIR
 
-COPY bwhc-backend_$VERSION.zip /
-RUN unzip bwhc-backend_$VERSION.zip && rm bwhc-backend_$VERSION.zip
+COPY bwhc-backend.zip /
+RUN unzip bwhc-backend.zip && rm bwhc-backend.zip
 
 WORKDIR $BWHC_BASE_DIR
 
@@ -21,6 +18,8 @@ RUN sed -i -r "s/ZPM_SITE(.*)/#ZPM_SITE\1/" ./config
 RUN sed -i -r "s~BWHC_DATA_ENTRY_DIR.*~BWHC_DATA_ENTRY_DIR=$BWHC_DATA_ENTRY_DIR~" ./config
 RUN sed -i -r "s~BWHC_QUERY_DATA_DIR.*~BWHC_QUERY_DATA_DIR=$BWHC_QUERY_DATA_DIR~" ./config
 RUN sed -i -r "s~BWHC_USER_DB_DIR.*~BWHC_USER_DB_DIR=$BWHC_USER_DB_DIR~" ./config
+
+RUN ["chmod", "+x", "./install.sh"]
 
 RUN ./install.sh $BWHC_BASE_DIR
 
@@ -38,8 +37,6 @@ ENV BWHC_USER_DB_DIR=$BWHC_BASE_DIR/data/user-db
 ENV BWHC_DATA_ENTRY_DIR=$BWHC_BASE_DIR/data/data-entry
 ENV BWHC_QUERY_DATA_DIR=$BWHC_BASE_DIR/data/query-data
 ENV BWHC_CONNECTOR_CONFIG=$BWHC_BASE_DIR/bwhcConnectorConfig.xml
-
-USER 999
 
 COPY --from=builder $BWHC_BASE_DIR/ $BWHC_BASE_DIR/
 

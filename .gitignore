@@ -1,1 +1,6 @@
 *.zip
+.idea/
+bwhc-frontend/
+bwhc-backend/
+bwhc-frontend.zip
+bwhc-backend.zip

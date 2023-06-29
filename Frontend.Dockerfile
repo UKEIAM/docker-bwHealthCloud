@@ -1,5 +1,5 @@
 # Build image
-FROM node:10-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Change to latest release
 # Required for image build using local copy of zip file
@@ -17,11 +17,12 @@ ARG BACKEND_HOSTNAME=localhost
 ARG BACKEND_PORT=8080
 
 # Use local copy
-#COPY bwhc-frontend_$VERSION.zip /bwhc-frontend.zip
-# Use latest frontend
-RUN wget https://bwhealthcloud.de/downloads/latest/bwhc-frontend.zip
+COPY bwhc-frontend.zip /bwhc-frontend.zip
 
-RUN unzip bwhc-frontend.zip && rm bwhc-frontend.zip
+# We don't use the provided frontend, as it's not optimized for subpath deployment
+# RUN wget https://bwhealthcloud.de/downloads/latest/bwhc-frontend.zip
+
+RUN unzip bwhc-frontend.zip # && rm bwhc-frontend.zip
 
 WORKDIR /bwhc-frontend
 
@@ -33,14 +34,12 @@ RUN sed -i -r "s/^(\s*)\"port\"[^,]*(,?)/\1\"port\": \"$NUXT_PORT\"\2/" ./packag
 
 # Prepare nuxt.config.js
 RUN sed -i -r "s/^(\s*)baseUrl[^,]*(,?)/\1baseUrl: process.env.BASE_URL || '$BACKEND_PROTOCOL:\/\/$BACKEND_HOSTNAME'\2/" ./nuxt.config.js
-RUN sed -i -r "s/^(\s*)port[^,]*(,?)/\1port: process.env.port || ':$BACKEND_PORT'\2/" ./nuxt.config.js
+RUN sed -i -r "s/^(\s*)port[^,]*(,?)/\1port: process.env.port || '$BACKEND_PORT'\2/" ./nuxt.config.js
 
 RUN npm run generate
 
 # Final image
-FROM node:10-alpine
-
-USER 999
+FROM node:20-alpine
 
 COPY --from=builder /bwhc-frontend /bwhc-frontend
 
